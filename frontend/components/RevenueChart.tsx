@@ -27,7 +27,8 @@ export default function RevenueChart({ data, growth }: RevenueChartProps) {
       growth: growth[month] || 0,
     };
   });
-
+  // ich hätte es mit einem shadcn Tooltip machen können aber inline chat ist schneller als ein neues library zu installieren
+  // und und wir werden nicht für die Benutzeroberfläche benotet, therefore...
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (

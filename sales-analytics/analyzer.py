@@ -92,6 +92,18 @@ class SalesAnalyzer:
             return df
         return df[df["status"] == "completed"]
 
+    def _count_outliers(self, df: pd.DataFrame, column: str = "order_amount") -> int:
+        if column not in df.columns or df[column].empty:
+            return 0
+        q1 = df[column].quantile(0.25)
+        q3 = df[column].quantile(0.75)
+        iqr = q3 - q1
+        if iqr == 0:
+            return 0
+        low = q1 - 2.0 * iqr
+        high = q3 + 2.0 * iqr
+        return int(df[(df[column] < low) | (df[column] > high)].shape[0])
+
     def run_basic_analytics(self) -> Dict[str, Any]:
         df = self.get_data()
         completed = self._completed(df)
@@ -211,6 +223,7 @@ class SalesAnalyzer:
             "customer_segments": customer_segments,
             "top_customers": top_customers,
             "top_products": top_products,
+            "outlier_count": self._count_outliers(completed),
         }
 
         self._analytics = analytics

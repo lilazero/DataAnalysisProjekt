@@ -241,3 +241,27 @@ class SalesAnalyzer:
             json.dump(self._analytics, f, indent=2, default=str)
 
         return output_path
+
+    def export_top_lists(self, output_dir: Optional[str] = None) -> List[str]:
+        if not self._analytics:
+            self.run_basic_analytics()
+
+        if output_dir is None:
+            output_dir = self.output_dir
+
+        os.makedirs(output_dir, exist_ok=True)
+        exported: List[str] = []
+
+        customers_path = os.path.join(output_dir, "top_customers.csv")
+        pd.DataFrame(self._analytics.get("top_customers", [])).to_csv(
+            customers_path, index=False
+        )
+        exported.append(customers_path)
+
+        products_path = os.path.join(output_dir, "top_products.csv")
+        pd.DataFrame(self._analytics.get("top_products", [])).to_csv(
+            products_path, index=False
+        )
+        exported.append(products_path)
+
+        return exported

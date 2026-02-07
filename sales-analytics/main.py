@@ -51,6 +51,8 @@ def main():
     if os.path.isdir(frontend_public):
         shutil.copyfile(json_path, os.path.join(frontend_public, "analytics.json"))
 
+    analyzer.export_top_lists(output_dir)
+
     print("\nDone")
     print(f"Output: {output_dir}")
     return analytics

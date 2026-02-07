@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { BarChart3 } from 'lucide-react';
+import StatCard from '@/components/StatCard';
 
 interface Analytics {
   total_revenue: number;
@@ -63,33 +65,46 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-animated-gradient">
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <header className="mb-8">
-          <h1 className="text-2xl font-bold text-white">Sales Analytics</h1>
-          <p className="text-gray-500 text-sm">
-            Minimal UI to prove Python analytics load in Next.js.
-          </p>
+      <div className="max-w-6xl mx-auto px-6 py-10">
+        <header className="mb-8 flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 glow-emerald">
+            <BarChart3 className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Sales Analytics</h1>
+            <p className="text-gray-500 text-sm">
+              Python analytics loaded into Next.js.
+            </p>
+          </div>
         </header>
 
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-gray-400 text-xs uppercase tracking-wide">Total Revenue</p>
-            <p className="text-white text-2xl font-semibold mt-2">
-              {formatCurrency(analytics.total_revenue)}
-            </p>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-gray-400 text-xs uppercase tracking-wide">Orders</p>
-            <p className="text-white text-2xl font-semibold mt-2">
-              {analytics.order_count}
-            </p>
-          </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-gray-400 text-xs uppercase tracking-wide">Customers</p>
-            <p className="text-white text-2xl font-semibold mt-2">
-              {analytics.customer_count}
-            </p>
-          </div>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          <StatCard
+            title="Total Revenue"
+            value={formatCurrency(analytics.total_revenue)}
+            icon="revenue"
+          />
+          <StatCard
+            title="Avg Order Value"
+            value={formatCurrency(analytics.average_order_value)}
+            icon="aov"
+          />
+          <StatCard
+            title="Customers"
+            value={analytics.customer_count}
+            icon="customers"
+          />
+          <StatCard
+            title="Total Orders"
+            value={analytics.order_count}
+            icon="orders"
+          />
+          <StatCard
+            title="Repeat Rate"
+            value={`${analytics.repeat_customer_rate}%`}
+            icon="repeat"
+            subtitle="returning customers"
+          />
         </section>
 
         <section className="rounded-xl border border-white/10 bg-white/5 p-5">

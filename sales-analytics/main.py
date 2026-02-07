@@ -28,6 +28,8 @@ def main():
 
     analyzer = SalesAnalyzer(output_dir=output_dir)
     analyzer.load_data(raw_data_path)
+    info = analyzer.inspect_data()
+    print(f"Loaded data shape: {info['shape']}")
     analyzer.clean_data_pipeline()
 
     clean_data_path = os.path.join(data_dir, "sales_clean.csv")

@@ -29,6 +29,16 @@ class SalesAnalyzer:
         self._data = df
         return df
 
+    def inspect_data(self) -> Dict[str, Any]:
+        df = self.get_data()
+        info = {
+            "shape": df.shape,
+            "columns": list(df.columns),
+            "missing_values": df.isnull().sum().to_dict(),
+            "duplicates": int(df.duplicated().sum()),
+        }
+        return info
+
     def clean_data_pipeline(self) -> pd.DataFrame:
         df = self.get_data().copy()
 

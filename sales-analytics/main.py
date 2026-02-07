@@ -5,6 +5,11 @@ import shutil
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from analyzer import SalesAnalyzer
+from algorithms import (
+    compare_sorting_performance,
+    compare_searching_performance,
+    generate_performance_report,
+)
 from generate_data import generate_sales_data
 
 
@@ -42,6 +47,18 @@ def main():
     print(f"Customer Count: {analytics['customer_count']}")
     print(f"Repeat Customer Rate: {analytics['repeat_customer_rate']:.1f}%")
     print(f"Top Category: {analytics['most_profitable_category']['name']}")
+
+    order_amounts = analyzer.get_data()["order_amount"].dropna().tolist()
+    sort_results = compare_sorting_performance(order_amounts[:100], iterations=50)
+    target = order_amounts[len(order_amounts) // 2] if order_amounts else 0
+    search_results = compare_searching_performance(
+        order_amounts, target, iterations=200
+    )
+
+    algo_report = generate_performance_report(sort_results, search_results)
+    algo_report_path = os.path.join(output_dir, "algorithm_comparison.txt")
+    with open(algo_report_path, "w", encoding="utf-8") as f:
+        f.write(algo_report)
 
     json_path = os.path.join(output_dir, "analytics.json")
     analyzer.export_analytics_json(json_path)

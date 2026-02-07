@@ -179,6 +179,10 @@ def generate_performance_report(sort_results: dict, search_results: dict) -> str
     report.append("ALGORITHM PERFORMANCE")
     report.append("=" * 60)
 
+    if not sort_results or not search_results:
+        report.append("\nNo benchmark results available.")
+        return "\n".join(report)
+
     report.append("\nSorting")
     for algo, data in sort_results.items():
         report.append(f"{algo}: {data['time'] * 1000:.4f} ms | {data['complexity']}")

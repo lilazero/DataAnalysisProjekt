@@ -10,6 +10,7 @@ class SalesAnalyzer:
         self.data_path = data_path
         self.output_dir = output_dir
         self._data: Optional[pd.DataFrame] = None
+        self._clean_data: Optional[pd.DataFrame] = None
         self._analytics: Dict[str, Any] = {}
 
         if data_path:
@@ -28,7 +29,46 @@ class SalesAnalyzer:
         self._data = df
         return df
 
+    def clean_data_pipeline(self) -> pd.DataFrame:
+        df = self.get_data().copy()
+
+        if "status" in df.columns:
+            df["status"] = df["status"].fillna("pending")
+
+        for col in ["order_amount", "unit_price", "quantity"]:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
+
+        if "quantity" in df.columns:
+            df = df[df["quantity"] > 0]
+
+        if "order_amount" in df.columns:
+            df = df[df["order_amount"] >= 0]
+
+        if "order_date" in df.columns:
+            df = df[df["order_date"].notna()]
+
+        if "order_id" in df.columns:
+            df = df.drop_duplicates(subset=["order_id"])
+
+        self._clean_data = df
+        return df
+
+    def export_clean_data(self, path: Optional[str] = None) -> str:
+        if self._clean_data is None:
+            raise ValueError("No clean data available")
+
+        if path is None:
+            base_dir = os.path.dirname(self.data_path) if self.data_path else self.output_dir
+            path = os.path.join(base_dir, "sales_clean.csv")
+
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        self._clean_data.to_csv(path, index=False)
+        return path
+
     def get_data(self) -> pd.DataFrame:
+        if self._clean_data is not None:
+            return self._clean_data
         if self._data is None:
             raise ValueError("No data loaded")
         return self._data

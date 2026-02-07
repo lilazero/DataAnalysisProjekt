@@ -28,6 +28,10 @@ def main():
 
     analyzer = SalesAnalyzer(output_dir=output_dir)
     analyzer.load_data(raw_data_path)
+    analyzer.clean_data_pipeline()
+
+    clean_data_path = os.path.join(data_dir, "sales_clean.csv")
+    analyzer.export_clean_data(clean_data_path)
     analytics = analyzer.run_basic_analytics()
     print("\nKey insights")
     print(f"Total Revenue: ${analytics['total_revenue']:,.2f}")

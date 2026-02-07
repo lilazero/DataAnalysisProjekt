@@ -4,6 +4,11 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
+import numpy as np
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 
 class SalesAnalyzer:
@@ -92,6 +97,26 @@ class SalesAnalyzer:
         if "status" not in df.columns:
             return df
         return df[df["status"] == "completed"]
+
+    def get_revenue_by_category(self) -> pd.Series:
+        df = self.get_data()
+        completed = self._completed(df)
+        if {"product_category", "order_amount"}.issubset(completed.columns):
+            return (
+                completed.groupby("product_category")["order_amount"]
+                .sum()
+                .sort_values(ascending=False)
+            )
+        return pd.Series(dtype=float)
+
+    def get_monthly_revenue(self) -> pd.Series:
+        df = self.get_data()
+        completed = self._completed(df).copy()
+        if "order_date" not in completed.columns or "order_amount" not in completed.columns:
+            return pd.Series(dtype=float)
+        completed = completed.dropna(subset=["order_date"])
+        completed["month"] = completed["order_date"].dt.to_period("M")
+        return completed.groupby("month")["order_amount"].sum().sort_index()
 
     def _count_outliers(self, df: pd.DataFrame, column: str = "order_amount") -> int:
         if column not in df.columns or df[column].empty:
@@ -306,3 +331,64 @@ class SalesAnalyzer:
             f.write(text)
 
         return text
+
+    def create_visualizations(self, output_dir: Optional[str] = None) -> List[str]:
+        if output_dir is None:
+            output_dir = os.path.join(self.output_dir, "figures")
+
+        os.makedirs(output_dir, exist_ok=True)
+        plt.style.use("seaborn-v0_8-darkgrid")
+
+        files = [
+            self._create_category_bar_chart(output_dir),
+            self._create_monthly_line_chart(output_dir),
+            self._create_order_histogram(output_dir),
+        ]
+        return files
+
+    def _create_category_bar_chart(self, output_dir: str) -> str:
+        revenue_by_cat = self.get_revenue_by_category()
+        fig, ax = plt.subplots(figsize=(10, 6))
+        colors = plt.cm.get_cmap("viridis")(np.linspace(0.2, 0.8, len(revenue_by_cat)))
+        ax.bar(revenue_by_cat.index, revenue_by_cat.values, color=colors)
+        ax.set_xlabel("Product Category")
+        ax.set_ylabel("Revenue ($)")
+        ax.set_title("Revenue by Product Category")
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
+        path = os.path.join(output_dir, "revenue_by_category.png")
+        plt.savefig(path, dpi=150, bbox_inches="tight")
+        plt.close()
+        return path
+
+    def _create_monthly_line_chart(self, output_dir: str) -> str:
+        monthly = self.get_monthly_revenue()
+        fig, ax = plt.subplots(figsize=(12, 6))
+        x_labels = [str(m) for m in monthly.index]
+        ax.plot(x_labels, monthly.values, marker="o", linewidth=2, color="#2E86AB")
+        ax.fill_between(x_labels, monthly.values, alpha=0.3, color="#2E86AB")
+        ax.set_xlabel("Month")
+        ax.set_ylabel("Revenue ($)")
+        ax.set_title("Monthly Revenue Trend")
+        plt.xticks(rotation=45, ha="right")
+        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f"${x:,.0f}"))
+        plt.tight_layout()
+        path = os.path.join(output_dir, "monthly_revenue_trend.png")
+        plt.savefig(path, dpi=150, bbox_inches="tight")
+        plt.close()
+        return path
+
+    def _create_order_histogram(self, output_dir: str) -> str:
+        df = self.get_data()
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.hist(
+            df["order_amount"], bins=30, color="#E94560", edgecolor="white", alpha=0.7
+        )
+        ax.set_xlabel("Order Amount ($)")
+        ax.set_ylabel("Frequency")
+        ax.set_title("Distribution of Order Values")
+        plt.tight_layout()
+        path = os.path.join(output_dir, "order_value_distribution.png")
+        plt.savefig(path, dpi=150, bbox_inches="tight")
+        plt.close()
+        return path

@@ -16,6 +16,7 @@ def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, "data")
     output_dir = os.path.join(base_dir, "output")
+    figures_dir = os.path.join(output_dir, "figures")
     os.makedirs(data_dir, exist_ok=True)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -47,6 +48,10 @@ def main():
 
     report_path = os.path.join(output_dir, "summary_report.txt")
     analyzer.generate_summary_report(report_path)
+
+    viz_files = analyzer.create_visualizations(figures_dir)
+    for path in viz_files:
+        print(f"Created: {os.path.basename(path)}")
 
     frontend_public = os.path.abspath(
         os.path.join(base_dir, "..", "frontend", "public")

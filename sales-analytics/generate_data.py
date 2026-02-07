@@ -10,7 +10,9 @@ from datetime import datetime, timedelta
 import os
 
 
-def generate_sales_data(n_orders: int = 200, output_path: str = None) -> pd.DataFrame:
+def generate_sales_data(
+    n_orders: int = 200, output_path: str | None = None, seed: int = 42
+) -> pd.DataFrame:
     """
     Generate synthetic sales data for testing and development.
 
@@ -21,7 +23,7 @@ def generate_sales_data(n_orders: int = 200, output_path: str = None) -> pd.Data
     Returns:
         DataFrame containing generated sales data
     """
-    np.random.seed(42)
+    np.random.seed(seed)
 
     categories = ["Electronics", "Clothing", "Home & Garden", "Sports", "Books"]
     products = {

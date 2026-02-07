@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { BarChart3 } from 'lucide-react';
 import StatCard from '@/components/StatCard';
+import CategoryChart from '@/components/CategoryChart';
+import RevenueChart from '@/components/RevenueChart';
 
 interface Analytics {
   total_revenue: number;
@@ -11,6 +13,9 @@ interface Analytics {
   order_count: number;
   repeat_customer_rate: number;
   most_profitable_category: { name: string; revenue: number };
+  revenue_by_category: Record<string, number>;
+  monthly_revenue: Record<string, number>;
+  monthly_growth: Record<string, number>;
 }
 
 export default function Home() {
@@ -118,6 +123,14 @@ export default function Home() {
           <p className="text-gray-500 text-xs mt-4">
             Data source: frontend/public/analytics.json
           </p>
+        </section>
+
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+          <RevenueChart
+            data={analytics.monthly_revenue}
+            growth={analytics.monthly_growth}
+          />
+          <CategoryChart data={analytics.revenue_by_category} />
         </section>
       </div>
     </main>

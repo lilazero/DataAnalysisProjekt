@@ -343,8 +343,9 @@ class SalesAnalyzer:
             self._create_category_bar_chart(output_dir),
             self._create_monthly_line_chart(output_dir),
             self._create_order_histogram(output_dir),
+            self._create_category_boxplot(output_dir),
         ]
-        return files
+        return [path for path in files if path]
 
     def _create_category_bar_chart(self, output_dir: str) -> str:
         revenue_by_cat = self.get_revenue_by_category()
@@ -389,6 +390,30 @@ class SalesAnalyzer:
         ax.set_title("Distribution of Order Values")
         plt.tight_layout()
         path = os.path.join(output_dir, "order_value_distribution.png")
+        plt.savefig(path, dpi=150, bbox_inches="tight")
+        plt.close()
+        return path
+
+    def _create_category_boxplot(self, output_dir: str) -> str:
+        df = self.get_data()
+        if "product_category" not in df.columns or "order_amount" not in df.columns:
+            return ""
+
+        categories = df["product_category"].dropna().unique()
+        data = [df[df["product_category"] == c]["order_amount"].values for c in categories]
+
+        fig, ax = plt.subplots(figsize=(10, 6))
+        bp = ax.boxplot(data, labels=categories, patch_artist=True)
+        colors = plt.cm.get_cmap("Set2")(np.linspace(0, 1, len(categories)))
+        for patch, color in zip(bp["boxes"], colors):
+            patch.set_facecolor(color)
+
+        ax.set_xlabel("Product Category")
+        ax.set_ylabel("Order Amount ($)")
+        ax.set_title("Order Amount by Category")
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
+        path = os.path.join(output_dir, "category_boxplot.png")
         plt.savefig(path, dpi=150, bbox_inches="tight")
         plt.close()
         return path

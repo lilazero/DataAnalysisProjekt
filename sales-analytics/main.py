@@ -45,6 +45,9 @@ def main():
     json_path = os.path.join(output_dir, "analytics.json")
     analyzer.export_analytics_json(json_path)
 
+    report_path = os.path.join(output_dir, "summary_report.txt")
+    analyzer.generate_summary_report(report_path)
+
     frontend_public = os.path.abspath(
         os.path.join(base_dir, "..", "frontend", "public")
     )

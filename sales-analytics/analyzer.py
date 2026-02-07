@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
@@ -265,3 +266,43 @@ class SalesAnalyzer:
         exported.append(products_path)
 
         return exported
+
+    def generate_summary_report(self, output_path: Optional[str] = None) -> str:
+        if not self._analytics:
+            self.run_basic_analytics()
+
+        analytics = self._analytics
+        lines = [
+            "=" * 60,
+            "SALES ANALYTICS SUMMARY",
+            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            "=" * 60,
+            "",
+            f"Total Revenue: ${analytics['total_revenue']:,.2f}",
+            f"Average Order Value: ${analytics['average_order_value']:,.2f}",
+            f"Total Customers: {analytics['customer_count']}",
+            f"Total Orders: {analytics['order_count']}",
+            f"Repeat Customer Rate: {analytics['repeat_customer_rate']:.1f}%",
+            "",
+            f"Top Category: {analytics['most_profitable_category']['name']} (${analytics['most_profitable_category']['revenue']:,.2f})",
+            "",
+            "Order Status:",
+        ]
+
+        for status, count in analytics["order_status_distribution"]["count"].items():
+            pct = analytics["order_status_distribution"]["percentage"][status]
+            lines.append(f"  {status}: {count} ({pct:.1f}%)")
+
+        lines.append("")
+        lines.append(f"Outlier Orders: {analytics['outlier_count']}")
+
+        text = "\n".join(lines)
+
+        if output_path is None:
+            output_path = os.path.join(self.output_dir, "summary_report.txt")
+
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(text)
+
+        return text

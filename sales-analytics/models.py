@@ -1,3 +1,5 @@
+"""Domain models for the sales analytics exercises."""
+
 from abc import ABC
 from typing import Dict, Any
 from datetime import datetime
@@ -18,7 +20,7 @@ class Entity(ABC):
         _id: unique identifier for the entity
     """
 
-    def __init__(self, entity_id):
+    def __init__(self, entity_id: str):
         if not entity_id or not str(entity_id).strip():
             raise ValueError("Entity ID cannot be empty or whitespace.")
         self._id = str(entity_id).strip()

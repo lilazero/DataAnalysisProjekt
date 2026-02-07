@@ -5,6 +5,8 @@ import { BarChart3 } from 'lucide-react';
 import StatCard from '@/components/StatCard';
 import CategoryChart from '@/components/CategoryChart';
 import RevenueChart from '@/components/RevenueChart';
+import StatusChart from '@/components/StatusChart';
+import TopCustomers from '@/components/TopCustomers';
 
 interface Analytics {
   total_revenue: number;
@@ -16,6 +18,16 @@ interface Analytics {
   revenue_by_category: Record<string, number>;
   monthly_revenue: Record<string, number>;
   monthly_growth: Record<string, number>;
+  order_status_distribution: {
+    count: Record<string, number>;
+    percentage: Record<string, number>;
+  };
+  top_customers: Array<{
+    customer_id: string;
+    lifetime_value: number;
+    order_count: number;
+    avg_order_value: number;
+  }>;
 }
 
 export default function Home() {
@@ -131,6 +143,13 @@ export default function Home() {
             growth={analytics.monthly_growth}
           />
           <CategoryChart data={analytics.revenue_by_category} />
+        </section>
+
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+          <div className="lg:col-span-2">
+            <TopCustomers customers={analytics.top_customers} />
+          </div>
+          <StatusChart data={analytics.order_status_distribution} />
         </section>
       </div>
     </main>

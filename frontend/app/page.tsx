@@ -7,6 +7,7 @@ import CategoryChart from '@/components/CategoryChart';
 import RevenueChart from '@/components/RevenueChart';
 import StatusChart from '@/components/StatusChart';
 import TopCustomers from '@/components/TopCustomers';
+import TopProducts from '@/components/TopProducts';
 
 interface Analytics {
   total_revenue: number;
@@ -27,6 +28,13 @@ interface Analytics {
     lifetime_value: number;
     order_count: number;
     avg_order_value: number;
+  }>;
+  top_products: Array<{
+    product_category: string;
+    product_name: string;
+    revenue: number;
+    quantity: number;
+    order_count: number;
   }>;
 }
 
@@ -151,6 +159,16 @@ export default function Home() {
           </div>
           <StatusChart data={analytics.order_status_distribution} />
         </section>
+
+        <section className="mt-6">
+          <TopProducts products={analytics.top_products} />
+        </section>
+
+        <footer className="text-center py-6 border-t border-white/10 mt-8">
+          <p className="text-gray-500 text-sm">
+            Sales Analytics Platform • Data processed by Python backend
+          </p>
+        </footer>
       </div>
     </main>
   );

@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "analytics": "python ../sales-analytics/main.py",
     "dev": "next dev",
+    "dev:analytics": "pnpm run analytics && next dev",
     "build": "next build",
+    "build:analytics": "pnpm run analytics && next build",
     "start": "next start",
     "lint": "eslint"
   },

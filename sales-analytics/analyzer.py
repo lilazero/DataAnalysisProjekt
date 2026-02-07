@@ -43,7 +43,11 @@ class SalesAnalyzer:
         df = self.get_data().copy()
 
         if "status" in df.columns:
-            df["status"] = df["status"].fillna("pending")
+            df["status"] = df["status"].fillna("pending").astype(str).str.lower().str.strip()
+
+        for col in ["product_category", "product_name", "customer_id", "order_id"]:
+            if col in df.columns:
+                df[col] = df[col].astype(str).str.strip()
 
         for col in ["order_amount", "unit_price", "quantity"]:
             if col in df.columns:

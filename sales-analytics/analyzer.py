@@ -159,6 +159,33 @@ class SalesAnalyzer:
                 .to_dict(orient="records")
             )
 
+        avg_order_size_by_category = {}
+        if {"product_category", "quantity"}.issubset(completed.columns):
+            avg_order_size_by_category = (
+                completed.groupby("product_category")["quantity"].mean().round(2).to_dict()
+            )
+
+        customer_segments = {"customer_count": {}, "total_revenue": {}, "avg_spending": {}}
+        if {"customer_id", "order_amount"}.issubset(completed.columns):
+            spending = completed.groupby("customer_id")["order_amount"].sum()
+            if len(spending):
+                p70 = spending.quantile(0.70)
+                p90 = spending.quantile(0.90)
+
+                def tier(value: float) -> str:
+                    if value >= p90:
+                        return "Premium"
+                    if value >= p70:
+                        return "Regular"
+                    return "Low"
+
+                segments = spending.apply(tier)
+                customer_segments = {
+                    "customer_count": segments.value_counts().to_dict(),
+                    "total_revenue": spending.groupby(segments).sum().to_dict(),
+                    "avg_spending": spending.groupby(segments).mean().to_dict(),
+                }
+
         repeat_customer_rate = 0.0
         if "customer_id" in completed.columns:
             orders_per_customer = completed.groupby("customer_id").size()
@@ -180,6 +207,8 @@ class SalesAnalyzer:
             "monthly_revenue": {k: round(float(v), 2) for k, v in monthly_revenue.items()},
             "monthly_growth": monthly_growth,
             "order_status_distribution": order_status_distribution,
+            "avg_order_size_by_category": avg_order_size_by_category,
+            "customer_segments": customer_segments,
             "top_customers": top_customers,
             "top_products": top_products,
         }

@@ -49,7 +49,9 @@ class SalesAnalyzer:
         df = self.get_data().copy()
 
         if "status" in df.columns:
-            df["status"] = df["status"].fillna("pending").astype(str).str.lower().str.strip()
+            df["status"] = (
+                df["status"].fillna("pending").astype(str).str.lower().str.strip()
+            )
 
         for col in ["product_category", "product_name", "customer_id", "order_id"]:
             if col in df.columns:
@@ -79,7 +81,9 @@ class SalesAnalyzer:
             raise ValueError("No clean data available")
 
         if path is None:
-            base_dir = os.path.dirname(self.data_path) if self.data_path else self.output_dir
+            base_dir = (
+                os.path.dirname(self.data_path) if self.data_path else self.output_dir
+            )
             path = os.path.join(base_dir, "sales_clean.csv")
 
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -112,7 +116,10 @@ class SalesAnalyzer:
     def get_monthly_revenue(self) -> pd.Series:
         df = self.get_data()
         completed = self._completed(df).copy()
-        if "order_date" not in completed.columns or "order_amount" not in completed.columns:
+        if (
+            "order_date" not in completed.columns
+            or "order_amount" not in completed.columns
+        ):
             return pd.Series(dtype=float)
         completed = completed.dropna(subset=["order_date"])
         completed["month"] = completed["order_date"].dt.to_period("M")
@@ -134,21 +141,35 @@ class SalesAnalyzer:
         df = self.get_data()
         completed = self._completed(df)
 
-        total_revenue = float(completed["order_amount"].sum()) if "order_amount" in completed.columns else 0.0
-        average_order_value = float(completed["order_amount"].mean()) if len(completed) else 0.0
-        customer_count = int(df["customer_id"].nunique()) if "customer_id" in df.columns else 0
+        total_revenue = (
+            float(completed["order_amount"].sum())
+            if "order_amount" in completed.columns
+            else 0.0
+        )
+        average_order_value = (
+            float(completed["order_amount"].mean()) if len(completed) else 0.0
+        )
+        customer_count = (
+            int(df["customer_id"].nunique()) if "customer_id" in df.columns else 0
+        )
         order_count = int(len(df))
 
         revenue_by_category = {}
         if {"product_category", "order_amount"}.issubset(completed.columns):
             revenue_by_category = (
-                completed.groupby("product_category")["order_amount"].sum().sort_values(ascending=False).to_dict()
+                completed.groupby("product_category")["order_amount"]
+                .sum()
+                .sort_values(ascending=False)
+                .to_dict()
             )
 
         most_profitable_category = {"name": "", "revenue": 0.0}
         if revenue_by_category:
             top_name = next(iter(revenue_by_category))
-            most_profitable_category = {"name": top_name, "revenue": float(revenue_by_category[top_name])}
+            most_profitable_category = {
+                "name": top_name,
+                "revenue": float(revenue_by_category[top_name]),
+            }
 
         monthly_revenue = {}
         monthly_growth = {}
@@ -184,7 +205,9 @@ class SalesAnalyzer:
             )
 
         top_products: List[Dict[str, Any]] = []
-        if {"product_category", "product_name", "order_amount", "quantity"}.issubset(completed.columns):
+        if {"product_category", "product_name", "order_amount", "quantity"}.issubset(
+            completed.columns
+        ):
             prod_stats = completed.groupby(["product_category", "product_name"]).agg(
                 revenue=("order_amount", "sum"),
                 quantity=("quantity", "sum"),
@@ -200,10 +223,17 @@ class SalesAnalyzer:
         avg_order_size_by_category = {}
         if {"product_category", "quantity"}.issubset(completed.columns):
             avg_order_size_by_category = (
-                completed.groupby("product_category")["quantity"].mean().round(2).to_dict()
+                completed.groupby("product_category")["quantity"]
+                .mean()
+                .round(2)
+                .to_dict()
             )
 
-        customer_segments = {"customer_count": {}, "total_revenue": {}, "avg_spending": {}}
+        customer_segments = {
+            "customer_count": {},
+            "total_revenue": {},
+            "avg_spending": {},
+        }
         if {"customer_id", "order_amount"}.issubset(completed.columns):
             spending = completed.groupby("customer_id")["order_amount"].sum()
             if len(spending):
@@ -241,8 +271,12 @@ class SalesAnalyzer:
                 "name": most_profitable_category["name"],
                 "revenue": round(float(most_profitable_category["revenue"]), 2),
             },
-            "revenue_by_category": {k: round(float(v), 2) for k, v in revenue_by_category.items()},
-            "monthly_revenue": {k: round(float(v), 2) for k, v in monthly_revenue.items()},
+            "revenue_by_category": {
+                k: round(float(v), 2) for k, v in revenue_by_category.items()
+            },
+            "monthly_revenue": {
+                k: round(float(v), 2) for k, v in monthly_revenue.items()
+            },
             "monthly_growth": monthly_growth,
             "order_status_distribution": order_status_distribution,
             "avg_order_size_by_category": avg_order_size_by_category,
@@ -400,7 +434,9 @@ class SalesAnalyzer:
             return ""
 
         categories = df["product_category"].dropna().unique()
-        data = [df[df["product_category"] == c]["order_amount"].values for c in categories]
+        data = [
+            df[df["product_category"] == c]["order_amount"].values for c in categories
+        ]
 
         fig, ax = plt.subplots(figsize=(10, 6))
         bp = ax.boxplot(data, labels=categories, patch_artist=True)

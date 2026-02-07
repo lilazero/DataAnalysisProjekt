@@ -4,7 +4,9 @@ from datetime import datetime
 from typing import Optional, Any, List
 
 
-def parse_date(date_value: Any, formats: Optional[List[str]] = None) -> Optional[datetime]:
+def parse_date(
+    date_value: Any, formats: Optional[List[str]] = None
+) -> Optional[datetime]:
     """
     Parse a date value into a datetime object.
 

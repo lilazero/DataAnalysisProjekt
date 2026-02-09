@@ -1,0 +1,216 @@
+{
+  "total_revenue": 90958.14,
+  "average_order_value": 678.79,
+  "customer_count": 49,
+  "order_count": 200,
+  "repeat_customer_rate": 76.6,
+  "most_profitable_category": {
+    "name": "Home & Garden",
+    "revenue": 22675.27
+  },
+  "revenue_by_category": {
+    "Home & Garden": 22675.27,
+    "Clothing": 21555.34,
+    "Sports": 17730.8,
+    "Books": 17270.92,
+    "Electronics": 11725.81
+  },
+  "monthly_revenue": {
+    "2023-01": 9659.81,
+    "2023-02": 8722.55,
+    "2023-03": 2961.7,
+    "2023-04": 8414.77,
+    "2023-05": 7779.0,
+    "2023-06": 8466.5,
+    "2023-07": 9254.26,
+    "2023-08": 7768.73,
+    "2023-09": 8376.81,
+    "2023-10": 6834.63,
+    "2023-11": 5465.99,
+    "2023-12": 7253.39
+  },
+  "monthly_growth": {
+    "2023-02": -9.7,
+    "2023-03": -66.05,
+    "2023-04": 184.12,
+    "2023-05": -7.56,
+    "2023-06": 8.84,
+    "2023-07": 9.3,
+    "2023-08": -16.05,
+    "2023-09": 7.83,
+    "2023-10": -18.41,
+    "2023-11": -20.03,
+    "2023-12": 32.7
+  },
+  "order_status_distribution": {
+    "count": {
+      "completed": 134,
+      "pending": 38,
+      "cancelled": 28
+    },
+    "percentage": {
+      "completed": 67.0,
+      "pending": 19.0,
+      "cancelled": 14.0
+    }
+  },
+  "avg_order_size_by_category": {
+    "Books": 2.58,
+    "Clothing": 2.69,
+    "Electronics": 2.0,
+    "Home & Garden": 2.65,
+    "Sports": 2.56
+  },
+  "customer_segments": {
+    "customer_count": {
+      "Low": 33,
+      "Regular": 9,
+      "Premium": 5
+    },
+    "total_revenue": {
+      "Low": 40270.51,
+      "Premium": 23001.980000000003,
+      "Regular": 27685.65
+    },
+    "avg_spending": {
+      "Low": 1220.318484848485,
+      "Premium": 4600.396000000001,
+      "Regular": 3076.1833333333334
+    }
+  },
+  "top_customers": [
+    {
+      "customer_id": "CUST28",
+      "lifetime_value": 5403.85,
+      "order_count": 5,
+      "avg_order_value": 1080.77
+    },
+    {
+      "customer_id": "CUST6",
+      "lifetime_value": 4926.400000000001,
+      "order_count": 4,
+      "avg_order_value": 1231.6000000000001
+    },
+    {
+      "customer_id": "CUST18",
+      "lifetime_value": 4315.9400000000005,
+      "order_count": 5,
+      "avg_order_value": 863.1880000000001
+    },
+    {
+      "customer_id": "CUST34",
+      "lifetime_value": 4263.61,
+      "order_count": 6,
+      "avg_order_value": 710.6016666666666
+    },
+    {
+      "customer_id": "CUST25",
+      "lifetime_value": 4092.18,
+      "order_count": 4,
+      "avg_order_value": 1023.045
+    },
+    {
+      "customer_id": "CUST49",
+      "lifetime_value": 3951.7599999999998,
+      "order_count": 3,
+      "avg_order_value": 1317.2533333333333
+    },
+    {
+      "customer_id": "CUST40",
+      "lifetime_value": 3854.48,
+      "order_count": 6,
+      "avg_order_value": 642.4133333333333
+    },
+    {
+      "customer_id": "CUST3",
+      "lifetime_value": 3129.98,
+      "order_count": 3,
+      "avg_order_value": 1043.3266666666666
+    },
+    {
+      "customer_id": "CUST35",
+      "lifetime_value": 2988.6499999999996,
+      "order_count": 2,
+      "avg_order_value": 1494.3249999999998
+    },
+    {
+      "customer_id": "CUST39",
+      "lifetime_value": 2970.42,
+      "order_count": 4,
+      "avg_order_value": 742.605
+    }
+  ],
+  "top_products": [
+    {
+      "product_category": "Home & Garden",
+      "product_name": "Lamp",
+      "revenue": 7925.599999999999,
+      "quantity": 24,
+      "order_count": 10
+    },
+    {
+      "product_category": "Clothing",
+      "product_name": "T-Shirt",
+      "revenue": 7879.39,
+      "quantity": 27,
+      "order_count": 8
+    },
+    {
+      "product_category": "Sports",
+      "product_name": "Yoga Mat",
+      "revenue": 7133.07,
+      "quantity": 29,
+      "order_count": 12
+    },
+    {
+      "product_category": "Home & Garden",
+      "product_name": "Cushion",
+      "revenue": 6562.18,
+      "quantity": 31,
+      "order_count": 10
+    },
+    {
+      "product_category": "Books",
+      "product_name": "Fiction",
+      "revenue": 6362.69,
+      "quantity": 20,
+      "order_count": 7
+    },
+    {
+      "product_category": "Clothing",
+      "product_name": "Shoes",
+      "revenue": 6070.07,
+      "quantity": 22,
+      "order_count": 8
+    },
+    {
+      "product_category": "Home & Garden",
+      "product_name": "Rug",
+      "revenue": 5401.46,
+      "quantity": 16,
+      "order_count": 6
+    },
+    {
+      "product_category": "Clothing",
+      "product_name": "Jacket",
+      "revenue": 5315.95,
+      "quantity": 19,
+      "order_count": 8
+    },
+    {
+      "product_category": "Sports",
+      "product_name": "Running Shoes",
+      "revenue": 4708.25,
+      "quantity": 17,
+      "order_count": 6
+    },
+    {
+      "product_category": "Books",
+      "product_name": "Art",
+      "revenue": 4502.33,
+      "quantity": 15,
+      "order_count": 6
+    }
+  ],
+  "outlier_count": 0
+}

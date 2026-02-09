@@ -1,0 +1,19 @@
+============================================================
+SALES ANALYTICS SUMMARY
+Generated: 2026-02-08 00:15:47
+============================================================
+
+Total Revenue: $90,958.14
+Average Order Value: $678.79
+Total Customers: 49
+Total Orders: 200
+Repeat Customer Rate: 76.6%
+
+Top Category: Home & Garden ($22,675.27)
+
+Order Status:
+  completed: 134 (67.0%)
+  pending: 38 (19.0%)
+  cancelled: 28 (14.0%)
+
+Outlier Orders: 0

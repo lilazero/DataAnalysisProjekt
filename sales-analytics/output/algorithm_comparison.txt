@@ -1,0 +1,19 @@
+============================================================
+ALGORITHM PERFORMANCE
+============================================================
+
+Sorting
+quicksort: 0.0783 ms | O(n log n) avg
+mergesort: 0.1919 ms | O(n log n)
+python_sorted: 0.0039 ms | O(n log n)
+numpy_sort: 0.0109 ms | O(n log n)
+Fastest sort: python_sorted
+
+Searching
+linear_search: 0.005863 ms | O(n)
+binary_search: 0.000989 ms | O(log n)
+python_in: 0.001233 ms | O(n)
+numpy_where: 0.002527 ms | O(n)
+Fastest search: binary_search
+
+Built-ins are usually faster because they are in C and optimized.

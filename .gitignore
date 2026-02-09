@@ -93,5 +93,3 @@ node_modules/
 Thumbs.db
 
 # Sales analytics generated outputs
-/sales-analytics/output/
-/sales-analytics/output/figures/
